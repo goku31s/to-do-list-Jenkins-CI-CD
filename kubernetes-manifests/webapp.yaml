@@ -1,3 +1,36 @@
+# --- Webapp Deployment ---
+# This manages the Python application pods.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+spec:
+  replicas: 2 # Run 2 pods for availability 
+  # --- ADD THIS STRATEGY SECTION ---
+  strategy:
+    type: Recreate
+  # ---------------------------------  
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: webapp
+          # IMPORTANT: Replace this with the path to YOUR image in Artifact Registry
+          image: goku431/3-tier-todo-app:4f07aedb0532fcf9d9b54b691fdfbbefd187f003
+          ports:
+            - containerPort: 8080
+          env:
+            # This environment variable tells the app how to connect to the database.
+            # 'mongo-service' is the name of the Kubernetes Service we created in mongo.yaml
+            - name: MONGO_URI
+              value: "mongodb://mongo-service:27017/"
+---
+# --- Webapp Service 
 apiVersion: v1
 kind: Service
 metadata:
@@ -7,26 +40,9 @@ spec:
   selector:
     app: webapp
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 8080
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: webapp-deployment
-spec:
-  replicas: 2
-  strategy: { type: Recreate }
-  selector: { matchLabels: { app: webapp } }
-  template: # <--- This one is correct, it belongs to the Deployment
-    metadata:
-      labels: { app: webapp }
+    - protocol: TCP
+      port: 80 # The Ingress will send traffic to this port
+      targetPort: 8080 # The container is listening on this port
+  template:
     spec:
-      containers:
-      - name: webapp
-        image: IMAGE_PLACEHOLDER 
-        ports: [{ containerPort: 8080 }]
-        env:
-        - name: MONGO_URI
-          value: "mongodb://mongo-service:27017/"
+      containers: []
