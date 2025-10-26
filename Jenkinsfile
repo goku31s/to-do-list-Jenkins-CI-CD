@@ -1,6 +1,6 @@
 // Define environment variables
 def DOCKER_IMAGE_NAME = "goku431/3-tier-todo-app" // <-- REPLACE
-def K8S_MANIFEST_DIR = "kubernetes"
+def K8S_MANIFEST_DIR = "kubernetes-manifests"
 
 pipeline {
     // Run on the Jenkins VM itself (not a k8s pod agent)
