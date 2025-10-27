@@ -43,6 +43,3 @@ spec:
     - protocol: TCP
       port: 80 # The Ingress will send traffic to this port
       targetPort: 8080 # The container is listening on this port
-  template:
-    spec:
-      containers: []
