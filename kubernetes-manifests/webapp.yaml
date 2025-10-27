@@ -20,8 +20,8 @@ spec:
     spec:
       containers:
         - name: webapp
-          # IMPORTANT: Replace this with the path to YOUR image in Artifact Registry
-          image: goku431/3-tier-todo-app:4f07aedb0532fcf9d9b54b691fdfbbefd187f003
+          # This is the image that will be called by Jenkins Pipeline. We can put any value.
+          image: IMAGE_PLACEHOLDER
           ports:
             - containerPort: 8080
           env:
